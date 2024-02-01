@@ -163,7 +163,9 @@ Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://tw
 Second part of Airbnb: Joann Vuong
 
 Betelhem Assefa - [Github](https://github.com) / [Twitter](https://twitter.com) 
+
 Daniel Osei - [Github](https://github.com) / [Twitter](https://twitter.com) 
+
 Third part of Airbnb
 ## License
 Public Domain. No copy write protection.
