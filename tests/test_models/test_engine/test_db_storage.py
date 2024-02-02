@@ -8,7 +8,7 @@ import inspect
 import models
 from models.engine import db_storage
 from models.amenity import Amenity
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from models.city import City
 from models.place import Place
 from models.review import Review
@@ -17,7 +17,9 @@ from models.user import User
 import json
 import os
 import pycodestyle as pep8
+import sqlalchemy
 import unittest
+from unittest.mock import MagicMock, patch
 DBStorage = db_storage.DBStorage
 classes = {"Amenity": Amenity, "City": City, "Place": Place,
            "Review": Review, "State": State, "User": User}
@@ -86,3 +88,76 @@ class TestFileStorage(unittest.TestCase):
     # @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+
+class TestDBStorage(unittest.TestCase):
+    def setUp(self):
+        """setup db for test"""
+        self.storage = DBStorage()
+        self.storage.reload()
+
+    @patch('sqlalchemy.create_engine')
+    def test_get_with_valid_class_and_id(self, mock_create_engine):
+        """test get method with valid class and id"""
+        # Mocking session.query().count() to return a specific count value
+        mock_query = MagicMock()
+        mock_query.count.return_value = 1
+        mock_session = MagicMock()
+        mock_session.query().filter_by().first.return_value = "Object"
+        mock_session.query().count.return_value = 1
+        mock_session.__enter__.return_value = mock_session
+        mock_create_engine.return_value = MagicMock()
+        mock_create_engine.return_value.__enter__.return_value = mock_session
+
+        # Testing get method with valid class and ID
+        result = self.storage.get(Amenity, "123")
+        self.assertEqual(result, "Object")
+
+    @patch('sqlalchemy.create_engine')
+    def test_get_with_invalid_class(self, mock_create_engine):
+        """test with invalid class without id"""
+        Mocking session.query().count() to return a specific count value
+        mock_query = MagicMock()
+        mock_query.count.return_value = 0
+        mock_session = MagicMock()
+        mock_session.query().filter_by().first.return_value = None
+        mock_session.query().count.return_value = 0
+        mock_session.__enter__.return_value = mock_session
+        mock_create_engine.return_value = MagicMock()
+        mock_create_engine.return_value.__enter__.return_value = mock_session
+
+        # Testing get method with invalid class
+        result = self.storage.get("InvalidClass", "123")
+        self.assertIsNone(result)
+
+    @patch('sqlalchemy.create_engine')
+    def test_count_with_valid_class(self, mock_create_engine):
+        """test with invalid class only"""
+        Mocking session.query().count() to return a specific count value
+        mock_query = MagicMock()
+        mock_query.count.return_value = 2
+        mock_session = MagicMock()
+        mock_session.query().count.return_value = 2
+        mock_session.__enter__.return_value = mock_session
+        mock_create_engine.return_value = MagicMock()
+        mock_create_engine.return_value.__enter__.return_value = mock_session
+
+        # Testing count method with valid class
+        result = self.storage.count(Amenity)
+        self.assertEqual(result, 2)
+
+    @patch('sqlalchemy.create_engine')
+    def test_count_with_invalid_class(self, mock_create_engine):
+        """test count with invalid class"""
+        Mocking session.query().count() to return a specific count value
+        mock_query = MagicMock()
+        mock_query.count.return_value = 0
+        mock_session = MagicMock()
+        mock_session.query().count.return_value = 0
+        mock_session.__enter__.return_value = mock_session
+        mock_create_engine.return_value = MagicMock()
+        mock_create_engine.return_value.__enter__.return_value = mock_session
+
+        # Testing count method with invalid class
+        result = self.storage.count("InvalidClass")
+        self.assertEqual(result, 0)
