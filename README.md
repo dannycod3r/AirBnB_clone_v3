@@ -24,8 +24,6 @@ This project is interpreted/tested on Ubuntu 20.04 LTS using python3 (version 3.
 ## Installation
 * Clone this repository: `git clone "https://github.com/alexaorrico/AirBnB_clone.git"`
 * Access AirBnb directory: `cd AirBnB_clone`
-* Create a virtual environment: `pythom3 -m venv venv`
-* Activate the virtual environment: `source venv/bin/activate`
 * Instal dependencies: `pip install -r requirements.txt`
 * Run hbnb(interactively): `./console` and enter command
 * Run hbnb(non-interactively): `echo "<command>" | ./console.py`
