@@ -113,3 +113,67 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+
+class TestFileStorageGet(unittest.TestCase):
+    def setUp(self):
+        self.storage = FileStorage()
+
+    def test_get_with_valid_class_and_id(self):
+        """test get with class and valid id"""
+        self.storage._FileStorage__objects = {
+            "Amenity.123": "Amenity Object",
+            "City.456": "City Object"
+        }
+        self.assertEqual(self.storage.get(Amenity, "123"), "Amenity Object")
+        self.assertEqual(self.storage.get(City, "456"), "City Object")
+
+    def test_get_with_invalid_class(self):
+        """Testing for an invalid class"""
+        self.assertIsNone(self.storage.get(FileStorage, "123"))
+
+    def test_get_with_invalid_id(self):
+        """Testing for a valid class but invalid ID"""
+        self.assertIsNone(self.storage.get(Amenity, None))
+
+    def test_get_with_nonexistent_object(self):
+        """Testing for a class and ID combination that
+           does not exist in __objects
+        """
+        self.assertIsNone(self.storage.get(Amenity, "789"))
+
+
+class TestFileStorageCount(unittest.TestCase):
+    def setUp(self):
+        """setup FileStorage"""
+        self.storage = FileStorage()
+
+    def test_count_with_valid_class(self):
+        """count with the valid classes"""
+        # Add some objects to __objects
+        self.storage._FileStorage__objects = {
+            "Amenity.1": Amenity(),
+            "Amenity.2": Amenity(),
+            "City.1": City(),
+            "City.2": City()
+        }
+        self.assertEqual(self.storage.count(Amenity), 2)
+        self.assertEqual(self.storage.count(City), 2)
+
+    def test_count_with_no_class_passed(self):
+        """count with no classes"""
+        # Add some objects to __objects
+        self.storage._FileStorage__objects = {
+            "Amenity.1": Amenity(),
+            "City.1": City()
+        }
+        self.assertEqual(self.storage.count(), 2)
+
+    def test_count_with_invalid_class(self):
+        """count with invalid class"""
+        # Add some objects to __objects
+        self.storage._FileStorage__objects = {
+            "Amenity.1": Amenity(),
+            "City.1": City()
+        }
+        self.assertEqual(self.storage.count(FileStorage), 0)
