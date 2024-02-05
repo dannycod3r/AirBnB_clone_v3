@@ -28,7 +28,6 @@ def delete_amenity(amenity_id):
     amenity.delete()
     return jsonify({})
 
-
 @app_views.route('/amenities', methods=['POST'], strict_slashes=False)
 def create_amenity():
     if not request.get_json():
@@ -38,7 +37,6 @@ def create_amenity():
     amenity = Amenity(**request.get_json())
     amenity.save()
     return jsonify(amenity.to_dict()), 201
-
 
 @app_views.route('/amenities/<amenity_id>', methods=['PUT'], strict_slashes=False)
 def update_amenity(amenity_id):
