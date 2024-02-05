@@ -24,8 +24,7 @@ def handle_users():
         if 'password' not in data:
             abort(400, "Missing password")
         user = User(**data)
-        storage.new(user)
-        storage.save()
+        user.save()
         return jsonify(user.to_dict()), 201
 
 
@@ -44,11 +43,13 @@ def user_byid(user_id):
             if not request.is_json:
                 abort(400, "Not a JSON")
             data = request.get_json()
-            ignore_keys = ["id", "created_at", "updated_at"]
+            if not data:
+                abort(400, "No JSON data provided")
+            ignore_keys = ["id", "email", "created_at", "updated_at"]
             for key, value in data.items():
                 if key not in ignore_keys:
                     setattr(user, key, value)
-            storage.save()
+            user.save()
             return jsonify(user.to_dict()), 200
     else:
         abort(404)
