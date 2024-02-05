@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-view for Amenity objects that handles all default RestFul API actions
+Amenity
 """
 from flask import jsonify, abort, request
 from models import storage
