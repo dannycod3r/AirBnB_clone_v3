@@ -12,44 +12,42 @@ from models.user import User
 def handle_users():
     """Retrieves the list of all User objects or create a new User object"""
     if request.method == 'GET':
-        users = storage.all("User").values()
-        users_list = [user.to_dict() for user in users]
-        return jsonify(users_list), 200
-    elif request.method == 'POST':
-        if not request.is_json:
-            abort(400, "Not a JSON")
-        data = request.get_json()
-        if 'email' not in data:
-            abort(400, "Missing email")
-        if 'password' not in data:
-            abort(400, "Missing password")
-        user = User(**data)
-        user.save()
-        return jsonify(user.to_dict()), 201
+        return jsonify([obj.to_dict() for obj in storage.all("User").
+                        values()]), 200
+    if request.method == 'POST':
+            if not request.get_json(silent=True):
+                abort(400, "Not a JSON")
+            if not request.get_json(silent=True).get('email'):
+                abort(400, "Missing email")
+            if not request.get_json(silent=True).get('password'):
+                abort(400, "Missing password")
+            kwargs = request.get_json(silent=True)
+            new_user = User(**kwargs)
+            new_user.save()
+            return jsonify(new_user.to_dict()), 201
 
 
-@app_views.route('/users/<user_id>', methods=['GET', 'DELETE', 'PUT'], strict_slashes=False)
+@app_views.route('/users/<user_id>', methods=['GET', 'DELETE', 'PUT'],
+                 strict_slashes=False)
 def user_byid(user_id):
     """Retrieves a User object by id, delete or update a User object"""
-    user = storage.get("User", user_id)
-    if user:
+    user_obj = storage.get("User", user_id)
+    if user_obj:
         if request.method == 'GET':
-            return jsonify(user.to_dict()), 200
+            return jsonify(user_obj.to_dict()), 200
         elif request.method == 'DELETE':
-            storage.delete(user)
+            storage.delete(user_obj)
             storage.save()
-            return jsonify({}), 200
+            return {}, 200
         elif request.method == 'PUT':
-            if not request.is_json:
+            if not request.get_json(silent=True):
                 abort(400, "Not a JSON")
-            data = request.get_json()
-            if not data:
-                abort(400, "No JSON data provided")
-            ignore_keys = ["id", "email", "created_at", "updated_at"]
-            for key, value in data.items():
-                if key not in ignore_keys:
-                    setattr(user, key, value)
-            user.save()
-            return jsonify(user.to_dict()), 200
+            kwargs = request.get_json(silent=True)
+            if kwargs:
+                for key, value in kwargs.items():
+                    if key not in ["id", "created_at", "updated_at"]:
+                        setattr(user_obj, key, value)
+                user_obj.save()
+            return jsonify(user_obj.to_dict()), 200
     else:
         abort(404)
