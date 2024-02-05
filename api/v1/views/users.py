@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-user
+View for Users that handles all RESTful API actions
 """
 from api.v1.views import app_views
 from flask import jsonify, abort, request, make_response
