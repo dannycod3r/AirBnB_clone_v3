@@ -1,4 +1,4 @@
-#!/usr/bin/pythom3
+#!/usr/bin/python3
 """The status route is define here
 """
 from api.v1.views import app_views
