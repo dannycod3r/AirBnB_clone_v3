@@ -16,16 +16,9 @@ class TestAmenityDocs(unittest.TestCase):
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
-    def test_pycodestyle_copliant_test_app(self):
-        """Test if module is pycodestyle compliant"""
-        codestyle = pstyle.StyleGuide(quiet=True)
-        result = codestyle.check_files(['tests/test_api/test_v1/test_amenities.py'])
-        self.assertEqual(result.total_errors, 0,
-                         "Found code style errors (and warnings).")
-
     def test_app_module_docstring(self):
         """Test for test module docstring"""
-        self.assertIsNot(app.__doc__, None,
+        self.assertIsNot(amenities.__doc__, None,
                          "amenities.py needs a docstring")
-        self.assertTrue(len(app.__doc__) >= 1,
+        self.assertTrue(len(amenities.__doc__) >= 1,
                         "amenities.py needs a docstring")

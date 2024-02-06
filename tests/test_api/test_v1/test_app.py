@@ -19,7 +19,7 @@ class TestAppDocs(unittest.TestCase):
     def test_pycodestyle_copliant_test_app(self):
         """Test is app module is pycodestyle compliant"""
         codestyle = pstyle.StyleGuide(quiet=True)
-        result = codestyle.check_files(['tests/test_api/test_v1/app.py'])
+        result = codestyle.check_files(['tests/test_api/test_v1/test_app.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 

@@ -116,7 +116,7 @@ class TestDBStorage(unittest.TestCase):
     @patch('sqlalchemy.create_engine')
     def test_get_with_invalid_class(self, mock_create_engine):
         """test with invalid class without id"""
-        Mocking session.query().count() to return a specific count value
+        # Mocking session.query().count() to return a specific count value
         mock_query = MagicMock()
         mock_query.count.return_value = 0
         mock_session = MagicMock()
@@ -133,7 +133,7 @@ class TestDBStorage(unittest.TestCase):
     @patch('sqlalchemy.create_engine')
     def test_count_with_valid_class(self, mock_create_engine):
         """test with invalid class only"""
-        Mocking session.query().count() to return a specific count value
+        # Mocking session.query().count() to return a specific count value
         mock_query = MagicMock()
         mock_query.count.return_value = 2
         mock_session = MagicMock()
@@ -149,7 +149,7 @@ class TestDBStorage(unittest.TestCase):
     @patch('sqlalchemy.create_engine')
     def test_count_with_invalid_class(self, mock_create_engine):
         """test count with invalid class"""
-        Mocking session.query().count() to return a specific count value
+        # Mocking session.query().count() to return a specific count value
         mock_query = MagicMock()
         mock_query.count.return_value = 0
         mock_session = MagicMock()
