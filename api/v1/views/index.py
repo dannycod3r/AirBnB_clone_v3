@@ -2,7 +2,7 @@
 """The status route is define here
 """
 from api.v1.views import app_views
-from flask import jsonify
+from flask import jsonify, make_response
 from models import storage
 from models.amenity import Amenity
 from models.city import City

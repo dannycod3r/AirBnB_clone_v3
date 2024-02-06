@@ -3,14 +3,12 @@
 """
 from api.v1.views import app_views
 from models import storage
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response
 from flask_cors import CORS
 import os
 
-host = os.environ.get('HBNB_API_HOST')
-port = os.environ.get('HBNB_API_PORT')
-
 app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 app.url_map.strict_slashes = False
 
 # configure CORS for flask
@@ -29,8 +27,12 @@ def close_db(exception):
 def error_404(error):
     """return 404 if resource not found
     """
-    return jsonify({"error": "Not found"})
+    return make_response(jsonify({"error": "Not found"}), 404)
 
 
 if __name__ == '__main__':
+
+    host = os.environ.get('HBNB_API_HOST')
+    port = os.environ.get('HBNB_API_PORT')
+
     app.run(host=host, port=port, threaded=True)
